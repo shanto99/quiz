@@ -1,0 +1,158 @@
+[
+    {
+        "id": "1",
+        "question": "What is the capital of France?",
+        "image": null,
+        "options": [
+            "Berlin",
+            "Madrid",
+            "Paris",
+            "Rome"
+        ],
+        "correctIndex": 2,
+        "explanation": "Paris is the capital and most populous city of France. It has been the country's capital since 987 AD and is home to famous landmarks like the Eiffel Tower and the Louvre."
+    },
+    {
+        "id": "2",
+        "question": "Which planet is known as the Red Planet?",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/600px-OSIRIS_Mars_true_color.jpg",
+        "options": [
+            "Venus",
+            "Mars",
+            "Jupiter",
+            "Saturn"
+        ],
+        "correctIndex": 1,
+        "explanation": "Mars is often called the 'Red Planet' because iron oxide (rust) is prevalent on its surface and gives it a reddish appearance. It is the fourth planet from the Sun and the second-smallest in the Solar System."
+    },
+    {
+        "id": "3",
+        "question": "What is the largest ocean on Earth?",
+        "image": null,
+        "options": [
+            "Atlantic Ocean",
+            "Indian Ocean",
+            "Arctic Ocean",
+            "Pacific Ocean"
+        ],
+        "correctIndex": 3,
+        "explanation": "The Pacific Ocean is the largest and deepest ocean on Earth, covering more than 165 million square kilometres — about 46% of the world's total ocean surface area."
+    },
+    {
+        "id": "4",
+        "question": "Which element has the chemical symbol 'O'?",
+        "image": null,
+        "options": [
+            "Gold",
+            "Osmium",
+            "Oxygen",
+            "Oganesson"
+        ],
+        "correctIndex": 2,
+        "explanation": "Oxygen (symbol O, atomic number 8) is a chemical element. It is a member of the chalcogen group and is the third-most abundant element in the universe by mass."
+    },
+    {
+        "id": "5",
+        "question": "Who painted the Mona Lisa?",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "options": [
+            "Vincent van Gogh",
+            "Pablo Picasso",
+            "Michelangelo",
+            "Leonardo da Vinci"
+        ],
+        "correctIndex": 3,
+        "explanation": "The Mona Lisa was painted by the Italian Renaissance master Leonardo da Vinci. It is believed to have been painted between 1503 and 1519 and is now on display at the Louvre Museum in Paris."
+    },
+    {
+        "id": "6",
+        "question": "What is the speed of light in a vacuum?",
+        "image": null,
+        "options": [
+            "300,000 km/s",
+            "150,000 km/s",
+            "450,000 km/s",
+            "600,000 km/s"
+        ],
+        "correctIndex": 0,
+        "explanation": "The speed of light in a vacuum is approximately 299,792,458 metres per second (≈ 300,000 km/s). It is denoted by the letter 'c' and is a fundamental constant in physics."
+    },
+    {
+        "id": "7",
+        "question": "How many sides does a hexagon have?",
+        "image": null,
+        "options": [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        "correctIndex": 1,
+        "explanation": "A hexagon is a polygon with exactly 6 sides and 6 angles. A regular hexagon has all sides equal in length and all interior angles equal to 120°."
+    },
+    {
+        "id": "8",
+        "question": "Which country is home to the Amazon Rainforest's majority?",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Amazonie_deforestation.jpg/600px-Amazonie_deforestation.jpg",
+        "options": [
+            "Colombia",
+            "Peru",
+            "Bolivia",
+            "Brazil"
+        ],
+        "correctIndex": 3,
+        "explanation": "Approximately 60% of the Amazon Rainforest is located in Brazil. The remaining 40% is spread across 8 other countries including Peru (13%), Colombia (10%), and Venezuela (6%)."
+    },
+    {
+        "id": "9",
+        "question": "In which year did the first moon landing take place?",
+        "image": null,
+        "options": [
+            "1965",
+            "1967",
+            "1969",
+            "1972"
+        ],
+        "correctIndex": 2,
+        "explanation": "Apollo 11 successfully landed on the Moon on July 20, 1969. Neil Armstrong became the first human to walk on the lunar surface, followed by Buzz Aldrin, while Michael Collins orbited above."
+    },
+    {
+        "id": "10",
+        "question": "What is the largest mammal in the world?",
+        "image": null,
+        "options": [
+            "African Elephant",
+            "Blue Whale",
+            "Giant Squid",
+            "Giraffe"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Blue Whale (Balaenoptera musculus) is the largest animal known to have ever existed. Adults can reach up to 30 metres in length and weigh up to 199 tonnes."
+    },
+    {
+        "id": "11",
+        "question": "Which gas do plants absorb during photosynthesis?",
+        "image": null,
+        "options": [
+            "Oxygen",
+            "Nitrogen",
+            "Carbon Dioxide",
+            "Hydrogen"
+        ],
+        "correctIndex": 2,
+        "explanation": "During photosynthesis, plants absorb carbon dioxide (CO₂) from the air and, using sunlight and water, convert it into glucose and oxygen. This process is vital for life on Earth."
+    },
+    {
+        "id": "12",
+        "question": "What is the hardest natural substance on Earth?",
+        "image": null,
+        "options": [
+            "Steel",
+            "Quartz",
+            "Titanium",
+            "Diamond"
+        ],
+        "correctIndex": 3,
+        "explanation": "Diamond is the hardest natural material on Earth, rating 10 on the Mohs hardness scale. It is a form of carbon where the atoms are arranged in a crystal structure called diamond cubic."
+    }
+]
