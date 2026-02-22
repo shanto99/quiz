@@ -13,6 +13,7 @@ import {
     UIManager,
     View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/theme";
 import { fetchRandomQuestions, QuizQuestion } from "../../lib/questions";
 
@@ -172,18 +173,18 @@ export default function QuizScreen() {
     // ── Loading state ────────────────────────────────────────────────────────
     if (loading) {
         return (
-            <View style={{ flex: 1, backgroundColor: COLORS.bg, justifyContent: "center", alignItems: "center" }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg, justifyContent: "center", alignItems: "center" }}>
                 <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
                 <ActivityIndicator size="large" color={COLORS.primary} />
                 <Text style={{ color: COLORS.textMuted, marginTop: 16, fontSize: 15 }}>Loading questions…</Text>
-            </View>
+            </SafeAreaView>
         );
     }
 
     // ── Error state ──────────────────────────────────────────────────────────
     if (fetchError) {
         return (
-            <View style={{ flex: 1, backgroundColor: COLORS.bg, justifyContent: "center", alignItems: "center", padding: 32 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg, justifyContent: "center", alignItems: "center", padding: 32 }}>
                 <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
                 <Ionicons name="cloud-offline-outline" size={56} color={COLORS.textMuted} />
                 <Text style={{ color: COLORS.text, fontSize: 17, fontWeight: "700", marginTop: 16, textAlign: "center" }}>{fetchError}</Text>
@@ -193,7 +194,7 @@ export default function QuizScreen() {
                 <TouchableOpacity onPress={() => router.back()} activeOpacity={0.75} style={{ marginTop: 14 }}>
                     <Text style={{ color: COLORS.textMuted, fontSize: 14 }}>Go back</Text>
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
         );
     }
 
@@ -221,16 +222,16 @@ export default function QuizScreen() {
     // ── Results ──────────────────────────────────────────────────────────────
     if (finished) {
         return (
-            <View style={{ flex: 1, backgroundColor: COLORS.bg }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
                 <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
                 <ResultsScreen questions={questions} answers={answers} onRetry={loadQuestions} />
-            </View>
+            </SafeAreaView>
         );
     }
 
     // ── Quiz ─────────────────────────────────────────────────────────────────
     return (
-        <View style={{ flex: 1, backgroundColor: COLORS.bg }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
             <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
             <View style={{ backgroundColor: COLORS.primary, paddingVertical: 16, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
@@ -272,6 +273,6 @@ export default function QuizScreen() {
                     </TouchableOpacity>
                 )}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
