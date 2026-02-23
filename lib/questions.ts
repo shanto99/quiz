@@ -1,5 +1,5 @@
 import { Query } from "react-native-appwrite";
-import { databases, DB_ID, getImageUrl, QUESTIONS_COL } from "./appwrite";
+import { databases, DB_ID, getImageUrl, QUESTIONS_COL, QUIZ_FUNCTION_URL } from "./appwrite";
 
 // ─── Type matching the Appwrite collection ────────────────────────────────────
 export type Question = {
@@ -59,4 +59,19 @@ export async function fetchRandomQuestions(limit = 5): Promise<QuizQuestion[]> {
     const shuffled = shuffle(docs);
     const picked = shuffled.slice(0, Math.min(limit, shuffled.length));
     return picked.map(toQuizQuestion);
+}
+
+/**
+ * Fetch questions for a specific category via the Appwrite Function URL.
+ */
+export async function fetchQuestionsByCategory(categoryId: string, limit = 5): Promise<QuizQuestion[]> {
+    const url = `${QUIZ_FUNCTION_URL}?categoryId=${encodeURIComponent(categoryId)}&limit=${limit}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch questions (HTTP ${response.status})`);
+    }
+    const json = await response.json();
+    // The function returns { questions: [...] }
+    const raw: Question[] = Array.isArray(json.questions) ? json.questions : [];
+    return raw.map(toQuizQuestion);
 }

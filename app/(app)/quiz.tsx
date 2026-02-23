@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/theme";
-import { fetchRandomQuestions, QuizQuestion } from "../../lib/questions";
+import { fetchQuestionsByCategory, fetchRandomQuestions, QuizQuestion } from "../../lib/questions";
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -136,6 +136,8 @@ function ResultsScreen({ questions, answers, onRetry }: { questions: QuizQuestio
 
 // ─── Quiz screen ──────────────────────────────────────────────────────────────
 export default function QuizScreen() {
+    const { categoryId, categoryName } = useLocalSearchParams<{ categoryId?: string; categoryName?: string }>();
+
     const [questions, setQuestions] = useState<QuizQuestion[]>([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState<string | null>(null);
@@ -153,9 +155,11 @@ export default function QuizScreen() {
         setAnswers([]);
         setFinished(false);
         try {
-            const data = await fetchRandomQuestions(5);
+            const data = categoryId
+                ? await fetchQuestionsByCategory(categoryId, 5)
+                : await fetchRandomQuestions(5);
             if (data.length === 0) {
-                setFetchError("No questions found in the database.");
+                setFetchError("No questions found for this category.");
             } else {
                 setQuestions(data);
             }
@@ -164,7 +168,7 @@ export default function QuizScreen() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [categoryId]);
 
     useEffect(() => {
         loadQuestions();
@@ -229,6 +233,8 @@ export default function QuizScreen() {
         );
     }
 
+    const headerLabel = categoryName ? String(categoryName) : "Quiz";
+
     // ── Quiz ─────────────────────────────────────────────────────────────────
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
@@ -238,9 +244,14 @@ export default function QuizScreen() {
                 <TouchableOpacity onPress={() => router.back()} style={{ padding: 4 }}>
                     <Ionicons name="arrow-back" size={24} color={COLORS.white} />
                 </TouchableOpacity>
-                <Text style={{ color: COLORS.white, fontWeight: "700", fontSize: 16 }}>
-                    Question {currentIndex + 1} / {questions.length}
-                </Text>
+                <View style={{ alignItems: "center" }}>
+                    <Text style={{ color: COLORS.primaryLight, fontSize: 11, fontWeight: "700", textTransform: "uppercase", letterSpacing: 0.8 }}>
+                        {headerLabel}
+                    </Text>
+                    <Text style={{ color: COLORS.white, fontWeight: "700", fontSize: 15 }}>
+                        Question {currentIndex + 1} / {questions.length}
+                    </Text>
+                </View>
                 <View style={{ width: 32 }} />
             </View>
 
