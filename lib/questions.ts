@@ -14,6 +14,7 @@ export type Question = {
     image_id: string | null;
     category?: string;
     difficulty?: string;
+    time_limit?: number;
 };
 
 // ─── Normalised shape used inside the app ─────────────────────────────────────
@@ -24,6 +25,7 @@ export type QuizQuestion = {
     correctIndex: number;
     explanation: string;
     image: string | null;   // resolved URL or null
+    timeLimit?: number;
 };
 
 function toQuizQuestion(doc: Question): QuizQuestion {
@@ -34,6 +36,7 @@ function toQuizQuestion(doc: Question): QuizQuestion {
         correctIndex: doc.correct_index,
         explanation: doc.explanation,
         image: doc.image_id ? getImageUrl(doc.image_id) : null,
+        timeLimit: doc.time_limit,
     };
 }
 

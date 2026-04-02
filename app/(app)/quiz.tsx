@@ -115,7 +115,7 @@ function ResultsScreen({ questions, answers, onRetry }: { questions: QuizQuestio
                             <View style={{ flex: 1 }}>
                                 <Text style={{ fontSize: 13, color: COLORS.text, fontWeight: "600", lineHeight: 20 }} numberOfLines={2}>{q.question}</Text>
                                 <Text style={{ fontSize: 12, color: correct ? COLORS.correct : COLORS.wrong, marginTop: 3, fontWeight: "600" }}>
-                                    {correct ? "Correct" : `Your answer: ${q.options[answers[i]!] ?? "Skipped"}`}
+                                    {correct ? "Correct" : `Your answer: ${answers[i] === -1 || answers[i] === null ? "Timed Out" : q.options[answers[i]!]}`}
                                 </Text>
                                 {!correct && <Text style={{ fontSize: 12, color: COLORS.correct, marginTop: 1 }}>Correct: {q.options[q.correctIndex]}</Text>}
                             </View>
@@ -143,6 +143,7 @@ export default function QuizScreen() {
     const [fetchError, setFetchError] = useState<string | null>(null);
 
     const [timerCount, setTimerCount] = useState<number | null>(null);
+    const [questionTimer, setQuestionTimer] = useState<number | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -157,6 +158,7 @@ export default function QuizScreen() {
         setAnswers([]);
         setFinished(false);
         setTimerCount(null);
+        setQuestionTimer(null);
         try {
             const data = categoryId
                 ? await fetchQuestionsByCategory(categoryId, 5)
@@ -188,6 +190,37 @@ export default function QuizScreen() {
             return () => clearTimeout(timer);
         }
     }, [timerCount]);
+
+    // ── Setup Question Timer ──
+    useEffect(() => {
+        if (loading || fetchError || timerCount !== null || finished) {
+            setQuestionTimer(null);
+            return;
+        }
+        if (selectedOption !== null) return;
+        
+        if (questions.length > 0) {
+            setQuestionTimer(questions[currentIndex]?.timeLimit ?? 10);
+        }
+    }, [currentIndex, timerCount, selectedOption, finished, loading, fetchError, questions]);
+
+    // ── Tick Question Timer ──
+    useEffect(() => {
+        if (questionTimer === null || questionTimer <= 0) return;
+        if (selectedOption !== null || finished) return;
+
+        const timer = setTimeout(() => {
+            setQuestionTimer(prev => (prev !== null ? prev - 1 : null));
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [questionTimer, selectedOption, finished]);
+
+    // ── Handle Timeout ──
+    useEffect(() => {
+        if (questionTimer === 0 && selectedOption === null && !finished) {
+            setSelectedOption(-1);
+        }
+    }, [questionTimer, selectedOption, finished]);
 
     // ── Loading state ────────────────────────────────────────────────────────
     if (loading) {
@@ -268,10 +301,12 @@ export default function QuizScreen() {
             <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
             <View style={{ backgroundColor: COLORS.primary, paddingVertical: 16, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                <TouchableOpacity onPress={() => router.back()} style={{ padding: 4 }}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-                </TouchableOpacity>
-                <View style={{ alignItems: "center" }}>
+                <View style={{ minWidth: 40, alignItems: "flex-start" }}>
+                    <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginLeft: -4 }}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+                    </TouchableOpacity>
+                </View>
+                <View style={{ alignItems: "center", flex: 1 }}>
                     <Text style={{ color: COLORS.primaryLight, fontSize: 11, fontWeight: "700", textTransform: "uppercase", letterSpacing: 0.8 }}>
                         {headerLabel}
                     </Text>
@@ -279,7 +314,15 @@ export default function QuizScreen() {
                         Question {currentIndex + 1} / {questions.length}
                     </Text>
                 </View>
-                <View style={{ width: 32 }} />
+                <View style={{ minWidth: 40, alignItems: "flex-end" }}>
+                    {questionTimer !== null && (
+                        <View style={{ backgroundColor: questionTimer <= 3 ? COLORS.wrong : "rgba(255,255,255,0.2)", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
+                            <Text style={{ color: COLORS.white, fontWeight: "800", fontSize: 12 }}>
+                                {questionTimer}s
+                            </Text>
+                        </View>
+                    )}
+                </View>
             </View>
 
             {/* Progress bar */}
