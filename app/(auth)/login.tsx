@@ -82,7 +82,7 @@ export default function LoginScreen() {
                     <Ionicons name="school" size={38} color={COLORS.white} />
                 </View>
                 <Text style={{ color: COLORS.white, fontSize: 28, fontWeight: "900", letterSpacing: -0.5 }}>
-                    MediQuiz
+                    ECG Quiz
                 </Text>
                 <Text style={{ color: COLORS.primaryLight, fontSize: 14, marginTop: 6 }}>
                     Sign in to continue

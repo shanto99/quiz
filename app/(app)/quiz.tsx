@@ -142,6 +142,8 @@ export default function QuizScreen() {
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
+    const [timerCount, setTimerCount] = useState<number | null>(null);
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [answers, setAnswers] = useState<(number | null)[]>([]);
@@ -154,6 +156,7 @@ export default function QuizScreen() {
         setSelectedOption(null);
         setAnswers([]);
         setFinished(false);
+        setTimerCount(null);
         try {
             const data = categoryId
                 ? await fetchQuestionsByCategory(categoryId, 5)
@@ -162,6 +165,7 @@ export default function QuizScreen() {
                 setFetchError("No questions found for this category.");
             } else {
                 setQuestions(data);
+                setTimerCount(3);
             }
         } catch (e: any) {
             setFetchError(e?.message ?? "Failed to load questions. Please try again.");
@@ -173,6 +177,17 @@ export default function QuizScreen() {
     useEffect(() => {
         loadQuestions();
     }, [loadQuestions]);
+
+    useEffect(() => {
+        if (timerCount === null) return;
+        if (timerCount > 0) {
+            const timer = setTimeout(() => setTimerCount(timerCount - 1), 1000);
+            return () => clearTimeout(timer);
+        } else if (timerCount === 0) {
+            const timer = setTimeout(() => setTimerCount(null), 800);
+            return () => clearTimeout(timer);
+        }
+    }, [timerCount]);
 
     // ── Loading state ────────────────────────────────────────────────────────
     if (loading) {
@@ -222,6 +237,18 @@ export default function QuizScreen() {
         if (index === selectedOption) return "wrong";
         return "disabled";
     };
+
+    // ── Timer state ──────────────────────────────────────────────────────────
+    if (timerCount !== null) {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primary, justifyContent: "center", alignItems: "center" }}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
+                <Text style={{ fontSize: 100, fontWeight: "900", color: COLORS.white }}>
+                    {timerCount > 0 ? timerCount : "Go!"}
+                </Text>
+            </SafeAreaView>
+        );
+    }
 
     // ── Results ──────────────────────────────────────────────────────────────
     if (finished) {

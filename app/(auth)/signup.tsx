@@ -164,7 +164,7 @@ export default function SignUpScreen() {
                     Create Account
                 </Text>
                 <Text style={{ color: COLORS.primaryLight, fontSize: 14, marginTop: 6 }}>
-                    Join MediQuiz today
+                    Join ECG Quiz today
                 </Text>
             </View>
 

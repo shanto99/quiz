@@ -69,7 +69,7 @@ function AnimatedSplash({ onFinish }: { onFinish: () => void }) {
         letterSpacing: -1,
         opacity: textOpacity,
       }}>
-        MediQuiz
+        ECG Quiz
       </Animated.Text>
 
       {/* Subtitle */}

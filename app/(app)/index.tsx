@@ -197,7 +197,7 @@ export default function HomeScreen() {
                     <View style={{ width: 70, height: 70, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.15)", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
                         <Ionicons name="school" size={36} color={COLORS.white} />
                     </View>
-                    <Text style={{ color: COLORS.white, fontSize: 30, fontWeight: "900", letterSpacing: -0.5 }}>MediQuiz</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 30, fontWeight: "900", letterSpacing: -0.5 }}>ECG Quiz</Text>
                     <Text style={{ color: COLORS.primaryLight, fontSize: 15, marginTop: 6, textAlign: "center" }}>
                         Pick a category and start your quiz
                     </Text>
