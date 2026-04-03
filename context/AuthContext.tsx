@@ -5,7 +5,10 @@ import React, {
     useEffect,
     useState,
 } from "react";
+import { OAuthProvider } from "react-native-appwrite";
 import { account } from "../lib/appwrite";
+import { makeRedirectUri } from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
 
 type User = {
     $id: string;
@@ -19,6 +22,7 @@ type AuthContextType = {
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
+    loginWithGoogle: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -54,8 +58,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
     };
 
+    const loginWithGoogle = async () => {
+        const deepLink = new URL(makeRedirectUri({ preferLocalhost: true }));
+        const scheme = `${deepLink.protocol}//`;
+
+        const loginUrl = await account.createOAuth2Token(
+            OAuthProvider.Google,
+            `${deepLink}`,
+            `${deepLink}`,
+            ["profile", "email", "openid"]
+        );
+
+        const result = await WebBrowser.openAuthSessionAsync(`${loginUrl}`, scheme);
+
+        if (result.type === 'success' && result.url) {
+            const url = new URL(result.url);
+            const secret = url.searchParams.get('secret');
+            const userId = url.searchParams.get('userId');
+
+            if (secret && userId) {
+                await account.createSession(userId, secret);
+                const u = await account.get();
+                setUser({ $id: u.$id, email: u.email, name: u.name });
+            }
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, isInitialising, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isInitialising, login, register, logout, loginWithGoogle }}>
             {children}
         </AuthContext.Provider>
     );

@@ -2,8 +2,18 @@
   "expo": {
     "name": "ECG Quiz",
     "slug": "ecg-quiz",
+    "scheme": "appwrite-callback-699ac26f000e10f12149",
+    "ios": {
+      "bundleIdentifier": "com.touhid.mediquiz"
+    },
+    "android": {
+      "package": "com.touhid.mediquiz"
+    },
     "web": {
       "bundler": "metro"
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

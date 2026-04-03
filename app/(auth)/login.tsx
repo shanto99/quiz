@@ -17,7 +17,7 @@ import { COLORS } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
 export default function LoginScreen() {
-    const { login } = useAuth();
+    const { login, loginWithGoogle } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -53,6 +53,15 @@ export default function LoginScreen() {
             shake();
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleGoogleAuth = async () => {
+        try {
+            await loginWithGoogle();
+        } catch (e: any) {
+            setError(e.message ?? "Google login failed.");
+            shake();
         }
     };
 
@@ -210,6 +219,33 @@ export default function LoginScreen() {
                             ) : (
                                 <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: "700" }}>Sign In</Text>
                             )}
+                        </TouchableOpacity>
+
+                        {/* Divider */}
+                        <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 24 }}>
+                            <View style={{ flex: 1, height: 1, backgroundColor: COLORS.inputBorder }} />
+                            <Text style={{ marginHorizontal: 16, color: COLORS.textMuted, fontSize: 13, fontWeight: "600" }}>OR</Text>
+                            <View style={{ flex: 1, height: 1, backgroundColor: COLORS.inputBorder }} />
+                        </View>
+
+                        {/* Google Button */}
+                        <TouchableOpacity
+                            onPress={handleGoogleAuth}
+                            activeOpacity={0.85}
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                paddingVertical: 14,
+                                borderRadius: 16,
+                                borderWidth: 1.5,
+                                borderColor: COLORS.inputBorder,
+                                backgroundColor: COLORS.white,
+                                gap: 12,
+                            }}
+                        >
+                            <Ionicons name="logo-google" size={20} color="#DB4437" />
+                            <Text style={{ fontSize: 15, fontWeight: "700", color: COLORS.text }}>Continue with Google</Text>
                         </TouchableOpacity>
                     </Animated.View>
 
