@@ -14,7 +14,7 @@ export const DB_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 export const QUESTIONS_COL = process.env.EXPO_PUBLIC_APPWRITE_QUESTIONS_COLLECTION_ID!;
 export const CATEGORIES_COL = process.env.EXPO_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!;
 export const QUIZ_FUNCTION_URL = process.env.EXPO_PUBLIC_APPWRITE_QUIZ_FUNCTION_URL!;
-export const BUCKET_ID = "question-images";
+export const BUCKET_ID = process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!;
 
 /** Build a direct-view URL for a file stored in Appwrite Storage */
 export function getImageUrl(fileId: string): string {
