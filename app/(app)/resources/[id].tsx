@@ -154,7 +154,15 @@ export default function LearningResourcesScreen() {
                             <TouchableOpacity
                                 key={resource.id}
                                 activeOpacity={0.7}
-                                onPress={() => Linking.openURL(resource.fileViewUrl)}
+                                onPress={() => router.push({
+                                    pathname: "/(app)/resources/preview",
+                                    params: { 
+                                        url: resource.fileViewUrl, 
+                                        title: resource.title,
+                                        categoryId: id,
+                                        categoryName: name
+                                    }
+                                })}
                                 style={{
                                     backgroundColor: COLORS.white,
                                     borderRadius: 16,
