@@ -1,159 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import {
-    ActivityIndicator,
-    ScrollView,
     StatusBar,
     Text,
     TouchableOpacity,
-    View
+    View,
+    ScrollView
 } from "react-native";
 import { COLORS } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
-import { Category, fetchCategories } from "../../lib/categories";
 
-// A small palette to tint category cards when the DB doesn't supply a color
-const CARD_COLORS = [
-    { bg: "#EEF2FF", icon: "#4F46E5" },
-    { bg: "#FFF7ED", icon: "#EA580C" },
-    { bg: "#ECFDF5", icon: "#059669" },
-    { bg: "#FDF2F8", icon: "#9333EA" },
-    { bg: "#FFF1F2", icon: "#E11D48" },
-    { bg: "#EFF6FF", icon: "#2563EB" },
-];
-
-// ─── Category Card ────────────────────────────────────────────────────────────
-function CategoryCard({
-    category,
-    index,
-    onPress,
-}: {
-    category: Category;
-    index: number;
-    onPress: () => void;
-}) {
-    const palette = CARD_COLORS[index % CARD_COLORS.length];
-    const iconName = (category.icon as any) ?? "book-outline";
-
-    return (
-        <TouchableOpacity
-            onPress={onPress}
-            activeOpacity={0.82}
-            style={{
-                flex: 1,
-                backgroundColor: COLORS.white,
-                borderRadius: 20,
-                padding: 18,
-                margin: 6,
-                shadowColor: "#000",
-                shadowOpacity: 0.06,
-                shadowRadius: 8,
-                shadowOffset: { width: 0, height: 3 },
-                elevation: 3,
-                minHeight: 110,
-                justifyContent: "space-between",
-            }}
-        >
-            <View
-                style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 14,
-                    backgroundColor: palette.bg,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 12,
-                }}
-            >
-                <Ionicons name={iconName} size={22} color={palette.icon} />
-            </View>
-            <View>
-                <Text
-                    style={{
-                        fontSize: 14,
-                        fontWeight: "700",
-                        color: COLORS.text,
-                        lineHeight: 20,
-                    }}
-                    numberOfLines={2}
-                >
-                    {category.name}
-                </Text>
-                {category.description ? (
-                    <Text
-                        style={{
-                            fontSize: 11,
-                            color: COLORS.textMuted,
-                            marginTop: 4,
-                            lineHeight: 16,
-                        }}
-                        numberOfLines={2}
-                    >
-                        {category.description}
-                    </Text>
-                ) : null}
-            </View>
-            <View
-                style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 12,
-                }}
-            >
-                <Text
-                    style={{
-                        fontSize: 12,
-                        color: palette.icon,
-                        fontWeight: "700",
-                    }}
-                >
-                    Start Quiz
-                </Text>
-                <Ionicons
-                    name="arrow-forward"
-                    size={13}
-                    color={palette.icon}
-                    style={{ marginLeft: 4 }}
-                />
-            </View>
-        </TouchableOpacity>
-    );
-}
-
-// ─── Home Screen ──────────────────────────────────────────────────────────────
-export default function HomeScreen() {
+export default function SelectionScreen() {
     const { user, logout } = useAuth();
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     const handleLogout = async () => {
         try { await logout(); } catch { /* session already gone */ }
     };
-
-    const loadCategories = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const data = await fetchCategories();
-            setCategories(data);
-        } catch (e: any) {
-            setError(e?.message ?? "Failed to load categories.");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        loadCategories();
-    }, [loadCategories]);
-
-    // Pair categories into rows of 2 for the grid layout
-    const rows: Category[][] = [];
-    for (let i = 0; i < categories.length; i += 2) {
-        rows.push(categories.slice(i, i + 2));
-    }
 
     return (
         <View style={{ flex: 1, backgroundColor: COLORS.bg }}>
@@ -195,74 +58,80 @@ export default function HomeScreen() {
 
                 <View style={{ alignItems: "center" }}>
                     <View style={{ width: 70, height: 70, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.15)", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                        <Ionicons name="school" size={36} color={COLORS.white} />
+                        <Ionicons name="medical" size={36} color={COLORS.white} />
                     </View>
-                    <Text style={{ color: COLORS.white, fontSize: 30, fontWeight: "900", letterSpacing: -0.5 }}>ECG Quiz</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 30, fontWeight: "900", letterSpacing: -0.5 }}>Welcome</Text>
                     <Text style={{ color: COLORS.primaryLight, fontSize: 15, marginTop: 6, textAlign: "center" }}>
-                        Pick a category and start your quiz
+                        What would you like to do today?
                     </Text>
                 </View>
             </View>
 
             {/* Body */}
             <ScrollView
-                contentContainerStyle={{ padding: 18, paddingTop: 24 }}
+                contentContainerStyle={{ padding: 24, paddingTop: 32, gap: 20 }}
                 showsVerticalScrollIndicator={false}
             >
-                <Text style={{ fontSize: 18, fontWeight: "800", color: COLORS.text, marginBottom: 4, marginLeft: 6 }}>
-                    Categories
-                </Text>
-                <Text style={{ fontSize: 13, color: COLORS.textMuted, marginBottom: 16, marginLeft: 6 }}>
-                    Choose a topic to test your knowledge
-                </Text>
-
-                {/* Loading */}
-                {loading && (
-                    <View style={{ alignItems: "center", paddingVertical: 60 }}>
-                        <ActivityIndicator size="large" color={COLORS.primary} />
-                        <Text style={{ color: COLORS.textMuted, marginTop: 14, fontSize: 14 }}>
-                            Loading categories…
+                {/* Practice Card */}
+                <TouchableOpacity
+                    onPress={() => router.push("/(app)/categories")}
+                    activeOpacity={0.8}
+                    style={{
+                        backgroundColor: COLORS.white,
+                        borderRadius: 24,
+                        padding: 24,
+                        shadowColor: "#000",
+                        shadowOpacity: 0.08,
+                        shadowRadius: 12,
+                        shadowOffset: { width: 0, height: 4 },
+                        elevation: 4,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 20,
+                    }}
+                >
+                    <View style={{ width: 64, height: 64, borderRadius: 20, backgroundColor: "#EEF2FF", alignItems: "center", justifyContent: "center" }}>
+                        <Ionicons name="game-controller" size={32} color={COLORS.primary} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 22, fontWeight: "800", color: COLORS.text, marginBottom: 4 }}>Practice</Text>
+                        <Text style={{ fontSize: 14, color: COLORS.textMuted, lineHeight: 20 }}>
+                            Test your knowledge with categorized quizzes.
                         </Text>
                     </View>
-                )}
+                    <Ionicons name="chevron-forward" size={24} color={COLORS.textMuted} />
+                </TouchableOpacity>
 
-                {/* Error */}
-                {!loading && error && (
-                    <View style={{ alignItems: "center", paddingVertical: 48 }}>
-                        <Ionicons name="cloud-offline-outline" size={48} color={COLORS.textMuted} />
-                        <Text style={{ color: COLORS.text, fontSize: 15, fontWeight: "700", marginTop: 12, textAlign: "center" }}>
-                            {error}
+                {/* Learn Card */}
+                <TouchableOpacity
+                    onPress={() => router.push("/(app)/learn")}
+                    activeOpacity={0.8}
+                    style={{
+                        backgroundColor: COLORS.white,
+                        borderRadius: 24,
+                        padding: 24,
+                        shadowColor: "#000",
+                        shadowOpacity: 0.08,
+                        shadowRadius: 12,
+                        shadowOffset: { width: 0, height: 4 },
+                        elevation: 4,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 20,
+                    }}
+                >
+                    <View style={{ width: 64, height: 64, borderRadius: 20, backgroundColor: "#ECFDF5", alignItems: "center", justifyContent: "center" }}>
+                        <Ionicons name="book" size={32} color="#059669" />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 22, fontWeight: "800", color: COLORS.text, marginBottom: 4 }}>Learn</Text>
+                        <Text style={{ fontSize: 14, color: COLORS.textMuted, lineHeight: 20 }}>
+                            Explore study materials and strengthen your foundations.
                         </Text>
-                        <TouchableOpacity
-                            onPress={loadCategories}
-                            activeOpacity={0.85}
-                            style={{ backgroundColor: COLORS.primary, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 28, marginTop: 20 }}
-                        >
-                            <Text style={{ color: COLORS.white, fontWeight: "700" }}>Retry</Text>
-                        </TouchableOpacity>
                     </View>
-                )}
+                    <Ionicons name="chevron-forward" size={24} color={COLORS.textMuted} />
+                </TouchableOpacity>
 
-                {/* Category Grid */}
-                {!loading && !error && rows.map((row, ri) => (
-                    <View key={ri} style={{ flexDirection: "row", marginHorizontal: -6 }}>
-                        {row.map((cat, ci) => (
-                            <CategoryCard
-                                key={cat.$id}
-                                category={cat}
-                                index={ri * 2 + ci}
-                                onPress={() =>
-                                    router.push({
-                                        pathname: "/(app)/quiz",
-                                        params: { categoryId: cat.$id, categoryName: cat.name },
-                                    })
-                                }
-                            />
-                        ))}
-                        {/* If odd number of items, pad the last row */}
-                        {row.length === 1 && <View style={{ flex: 1, margin: 6 }} />}
-                    </View>
-                ))}
             </ScrollView>
         </View>
     );
